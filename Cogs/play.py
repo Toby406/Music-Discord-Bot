@@ -256,10 +256,13 @@ class CogPlay(commands.Cog):
             await ctx.send("<:YouTubeLogo:798492404587954176> Searching...", delete_after=10)
             # Check if the link exists
             track = await self.bot.wavelink.get_tracks(args)
-            args = track[0]
+            if track[0].is_stream == True:
+                await ctx.send(f"{ctx.author.mention} Support for live streams is still in beta!")
+                track[0].duration = 1
             if track is None:
                 return await ctx.send(f"{self.bot.emojiList.false} {ctx.author.mention} The YouTube link is invalid!")
-        
+            args = track[0]
+            
         # Query
         else:
             args = await searchQuery(self, ctx, args)
